@@ -3,23 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Yuanbin's Page</title>
+
+    <!-- Add Bootstrap CSS here -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+
+        .center-container {
+            width: 960px;
+            margin: 0 auto; /* Centers the container */
+        }
+
+        .flex-container {
+            display: flex; /* Enables Flexbox */
+            justify-content: space-between; /* Spaces out the child elements */
+            align-items: flex-start; /* Aligns items to the top */
+        }
+
+        .info {
+            flex-grow: 1; /* Allows the text section to grow and use available space */
+        }
+
+        .achievements, .projects {
+            margin-top: 20px; /* Adds some space above the section */
+        }
+
+        .projects a {
+            display: block; /* Makes each link a block element */
+            margin-bottom: 10px; /* Adds space between links */
+        }
+    </style>
 </head>
 <body>
-<h1>
-    Yuanbin's Page
+<div class="container center-container">
+    <div class="row flex-container">
+        <div class="col-md-6 info">
+            <h1>Yuanbin's Page</h1>
+            <h2>Personal Info</h2>
+            <p>I am Yuanbin and I am a student from St Hilda Primary School</p>
+        </div>
+        <div class="col-md-6">
+            <img src="yuanbin.jpg" alt='yuanbin' class="img-fluid">
+        </div>
+    </div>
 
-</h1>
-<p>
-    This is yuanbin's page
-    This is the 2 version
+    <div class="achievements">
+        <h2>Achievements</h2>
+        <ul class="list-unstyled">
+            <li>Winner of the National Math Olympiad 2023</li>
+            <li>First Prize in the State Science Fair 2022</li>
+            <li>Lead role in the school annual play 2023</li>
+            <!-- Add more achievements as needed -->
+        </ul>
+    </div>
 
-</p>
-<h2>
-    personal info
-</h2>
+    <div class="projects">
+        <h2>Projects</h2>
+        <ul class="list-unstyled">
+            <li><a href="/game-of-life">Game of life</a></li>
+            <li><a href="http://link-to-project2.com">Project 2</a></li>
+            <li><a href="http://link-to-project3.com">Project 3</a></li>
 
-<p>
-I am Yuanbin and i am a student from St Hilda Primary School
-</p>
+            <li><a href="/tic-tac-toe">Tic Tac Toe</a></li>
+            <!-- Add more projects as needed -->
+        </ul>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

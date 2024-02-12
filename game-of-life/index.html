@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Game of Life</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            margin: auto;
+        }
+        td {
+            border: 1px solid #000000;
+            height: 20px;
+            width: 20px;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            background-color: rgb(255, 255, 255);
+        }
+    </style>
+</head>
+<body>
+<h1>Game of Life</h1>
+<p>Welcome to the Game of Life<br>Work still in progress<br>Version Alpha 1</p>
+<h2>Changelog</h2>
+<p>1: Added board<br>Made board clickable<br>Can place marker on board</p>
+<h1>Test it!</h1>
+<button type="button" onclick="toggleGame()">Start/Stop</button>
+
+<script>
+    let board = [];
+    const boardSize = 50;
+    let intervalId = null;
+
+    function initializeBoard() {
+        for (let i = 0; i < boardSize; i++) {
+            board[i] = [];
+            for (let j = 0; j < boardSize; j++) {
+                board[i][j] = false;
+            }
+        }
+        createTable();
+    }
+
+    function createTable() {
+        const table = document.createElement('table');
+        for (let x = 0; x < boardSize; x++) {
+            const row = table.insertRow();
+            for (let y = 0; y < boardSize; y++) {
+                const cell = row.insertCell();
+                cell.id = `cell-${x}-${y}`;
+                cell.addEventListener('click', () => cellClicked(cell, x, y));
+            }
+        }
+        document.body.appendChild(table);
+    }
+
+    function countLiveNeighbors(x, y) {
+        let count = 0;
+        for (let i = -1; i <= 1; i++) {
+            for (let j = -1; j <= 1; j++) {
+                if (i === 0 && j === 0) continue;
+                const nx = x + i;
+                const ny = y + j;
+                if (nx >= 0 && nx < boardSize && ny >= 0 && ny < boardSize && board[nx][ny]) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    function updateBoard() {
+        let newBoard = JSON.parse(JSON.stringify(board));
+        for (let x = 0; x < boardSize; x++) {
+            for (let y = 0; y < boardSize; y++) {
+                const liveNeighbors = countLiveNeighbors(x, y);
+                if (board[x][y]) {
+                    if (liveNeighbors < 2 || liveNeighbors > 3) {
+                        newBoard[x][y] = false;
+                    }
+                } else {
+                    if (liveNeighbors === 3) {
+                        newBoard[x][y] = true;
+                    }
+                }
+            }
+        }
+        board = newBoard;
+        renderBoard();
+    }
+
+    function cellClicked(cell, x, y) {
+        board[x][y] = !board[x][y];
+        cell.style.backgroundColor = board[x][y] ? 'black' : 'white';
+    }
+
+    function renderBoard() {
+        for (let x = 0; x < boardSize; x++) {
+            for (let y = 0; y < boardSize; y++) {
+                const cell = document.getElementById(`cell-${x}-${y}`);
+                cell.style.backgroundColor = board[x][y] ? 'black' : 'white';
+            }
+        }
+    }
+
+    function toggleGame() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        } else {
+            intervalId = setInterval(updateBoard, 100); // Update every second
+        }
+    }
+
+    initializeBoard();
+</script>
+</body>
+</html>
