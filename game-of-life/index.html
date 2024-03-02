@@ -2,36 +2,37 @@
 <html lang="en">
 <head>
     <title>Game of Life</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        table {
-            border-collapse: collapse;
-            margin: auto;
-        }
-        td {
-            border: 1px solid #000000;
+        /* Custom styles if needed */
+        .game-table td {
             height: 20px;
             width: 20px;
-            text-align: center;
-            vertical-align: middle;
             cursor: pointer;
             background-color: rgb(255, 255, 255);
         }
     </style>
 </head>
 <body>
-<h1>Game of Life</h1>
-<p>Welcome to the Game of Life<br>Work still in progress<br>Version Alpha 1</p>
-<h2>Changelog</h2>
-<p>1: Added board<br>Made board clickable<br>Can place marker on board</p>
-<h1>Test it!</h1>
-<button type="button" onclick="toggleGame()">Start/Stop</button>
-
+<div class="container text-center mt-4" id="game-container">
+    <h1>Game of Life</h1>
+    <p>Welcome to the Game of Life</p>
+    <p> Rules:
+        if a black cell has 2 or less neighbours, it will turn white
+        if a black cell has 3 or more neighbours, it will turn white
+        if a white cells has exactly three neighbours, it will turn black.
+    </p>
+    <button type="button" class="btn btn-primary" onclick="toggleGame()">Start/Stop</button>
+    <button type="button" class="btn btn-secondary" onclick="resetGame()">Reset</button>
+</div>
 <script>
     let board = [];
     const boardSize = 50;
     let intervalId = null;
 
     function initializeBoard() {
+        // Initializes the board as a two-dimensional array (board), setting all cells to false (dead).
+        // Calls createTable to generate the HTML table representing the board.
         for (let i = 0; i < boardSize; i++) {
             board[i] = [];
             for (let j = 0; j < boardSize; j++) {
@@ -43,6 +44,8 @@
 
     function createTable() {
         const table = document.createElement('table');
+        table.className = 'table table-bordered game-table'; // Add Bootstrap table classes
+
         for (let x = 0; x < boardSize; x++) {
             const row = table.insertRow();
             for (let y = 0; y < boardSize; y++) {
@@ -51,10 +54,15 @@
                 cell.addEventListener('click', () => cellClicked(cell, x, y));
             }
         }
-        document.body.appendChild(table);
+
+        // Append the table to the container
+        document.getElementById('game-container').appendChild(table);
     }
 
+
     function countLiveNeighbors(x, y) {
+        // Counts and returns the number of live (true) neighbors around a given cell (x, y).
+        // It checks adjacent cells, taking care not to go out of bounds and excluding the cell itself.
         let count = 0;
         for (let i = -1; i <= 1; i++) {
             for (let j = -1; j <= 1; j++) {
@@ -70,6 +78,12 @@
     }
 
     function updateBoard() {
+        // Creates a deep copy of the current board state (newBoard).
+       // Applies the Game of Life rules to each cell:
+            //A live cell with fewer than 2 or more than 3 live neighbors dies.
+            //A dead cell with exactly 3 live neighbors becomes alive.
+            //Updates the board with newBoard.
+            //Calls renderBoard to update the visual representation.
         let newBoard = JSON.parse(JSON.stringify(board));
         for (let x = 0; x < boardSize; x++) {
             for (let y = 0; y < boardSize; y++) {
@@ -90,11 +104,14 @@
     }
 
     function cellClicked(cell, x, y) {
+        // Toggles the state of a cell (alive/dead) when clicked.
+        // Updates the cell's background color to reflect its new state.
         board[x][y] = !board[x][y];
         cell.style.backgroundColor = board[x][y] ? 'black' : 'white';
     }
 
     function renderBoard() {
+        // Iterates through all cells, updating their background color based on their current state in the board array.
         for (let x = 0; x < boardSize; x++) {
             for (let y = 0; y < boardSize; y++) {
                 const cell = document.getElementById(`cell-${x}-${y}`);
@@ -104,15 +121,37 @@
     }
 
     function toggleGame() {
+        // Starts or stops the game simulation.
+        //If the game is running, it clears the interval (intervalId) stopping the updates.
+            //If the game
+        // is stopped, it sets an interval to repeatedly call updateBoard every 100 milliseconds.
         if (intervalId) {
             clearInterval(intervalId);
             intervalId = null;
         } else {
-            intervalId = setInterval(updateBoard, 100); // Update every second
+            intervalId = setInterval(updateBoard, 100); // Update every 100 milliseconds
         }
     }
 
     initializeBoard();
+    function resetGame() {
+        // Stop the game if it is running
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+
+        // Reset the board to its initial state (all cells dead)
+        for (let i = 0; i < boardSize; i++) {
+            for (let j = 0; j < boardSize; j++) {
+                board[i][j] = false;
+            }
+        }
+
+        // Re-render the board
+        renderBoard();
+    }
+
 </script>
 </body>
 </html>
